@@ -13,12 +13,16 @@ extension UIImageView {
         self.layer.cornerRadius = self.frame.height/2
     }
     func getImageFromURL(imgURL:String) {
+        Instance.group.enter()
+        Instance.semaphore.wait()
         DispatchQueue.global(qos: .userInitiated).async { [weak self] in
             let url = URL(string: imgURL)
             let data = try? Data(contentsOf: url!)
             DispatchQueue.main.async { [weak self] in
                 self!.image = UIImage(data: data!)
             }
+            Instance.semaphore.signal()
+            Instance.group.leave()
         }
     }
 }

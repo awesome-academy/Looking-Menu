@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		1318BAB325978D520015AA13 /* Recipe.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1318BAB225978D520015AA13 /* Recipe.swift */; };
 		1318BAB825978ED40015AA13 /* APIRecipe.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1318BAB725978ED40015AA13 /* APIRecipe.swift */; };
+		13443387259AD429005C0AF3 /* DetailRecipeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13443386259AD429005C0AF3 /* DetailRecipeController.swift */; };
 		135AE3C92595D16B00A8130E /* WelcomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 135AE3C82595D16B00A8130E /* WelcomeViewController.swift */; };
 		135AE3D52595D5EF00A8130E /* HomeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 135AE3D42595D5EF00A8130E /* HomeController.swift */; };
 		135AE3DA2595D61600A8130E /* FavouriteController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 135AE3D92595D61600A8130E /* FavouriteController.swift */; };
@@ -54,6 +55,7 @@
 /* Begin PBXFileReference section */
 		1318BAB225978D520015AA13 /* Recipe.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Recipe.swift; sourceTree = "<group>"; };
 		1318BAB725978ED40015AA13 /* APIRecipe.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIRecipe.swift; sourceTree = "<group>"; };
+		13443386259AD429005C0AF3 /* DetailRecipeController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailRecipeController.swift; sourceTree = "<group>"; };
 		135AE3C82595D16B00A8130E /* WelcomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeViewController.swift; sourceTree = "<group>"; };
 		135AE3D42595D5EF00A8130E /* HomeController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeController.swift; sourceTree = "<group>"; };
 		135AE3D92595D61600A8130E /* FavouriteController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavouriteController.swift; sourceTree = "<group>"; };
@@ -128,6 +130,7 @@
 				135AE3DE2595D62700A8130E /* DietController.swift */,
 				135AE3E32595D63400A8130E /* IngredientController.swift */,
 				137587DB2598D4CB00A5CC20 /* SearchResultController.swift */,
+				13443386259AD429005C0AF3 /* DetailRecipeController.swift */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -357,6 +360,7 @@
 				1318BAB325978D520015AA13 /* Recipe.swift in Sources */,
 				13771FCF2599C019002A12E1 /* CustomLayout.swift in Sources */,
 				13712F3525957BEB00D772D2 /* TabBar.swift in Sources */,
+				13443387259AD429005C0AF3 /* DetailRecipeController.swift in Sources */,
 				135AE3D52595D5EF00A8130E /* HomeController.swift in Sources */,
 				13712EED2595713E00D772D2 /* SceneDelegate.swift in Sources */,
 				136D093C259832D500459638 /* ProtocolAPI.swift in Sources */,

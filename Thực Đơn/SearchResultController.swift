@@ -48,6 +48,8 @@ class SearchResultController: UIViewController {
 
 extension SearchResultController : SearchByName {
     func getResultSearch(result: ResultSearch) {
+        Instance.group.enter()
+        Instance.semaphore.wait()
         DispatchQueue.main.async {
             self.labelTotalResult.text = "Found \(result.totalResults) results"
             self.itemNotFound.isHidden = result.totalResults != 0
@@ -55,6 +57,9 @@ extension SearchResultController : SearchByName {
             self.listSearch = result
             self.resultSearchCollection.reloadData()
             self.finishSearch()
+            
+            Instance.group.leave()
+            Instance.semaphore.signal()
         }
     }
 }

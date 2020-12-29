@@ -51,9 +51,14 @@ extension HomeController : UICollectionViewDelegate,UICollectionViewDataSource,U
 
 extension HomeController : DataDelegate {
     func listRecipeRandom(recipes: Recipes) {
+        Instance.group.enter()
+        Instance.semaphore.wait()
         DispatchQueue.main.async {
             self.list = recipes
             self.HomeRecipe.reloadData()
+            
+            Instance.group.leave()
+            Instance.semaphore.signal()
         }
     }
 }
