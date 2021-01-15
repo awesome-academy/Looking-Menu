@@ -1,4 +1,5 @@
 import UIKit
+
 final class ViewController: UIViewController {
     @IBOutlet private weak var containerHomeView: UIView!
     @IBOutlet private weak var containerFavoriteView: UIView!
@@ -52,4 +53,3 @@ final class ViewController: UIViewController {
         tabBarCollection.collectionViewLayout.invalidateLayout()
     }
 }
-
