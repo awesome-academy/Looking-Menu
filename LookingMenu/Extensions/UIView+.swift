@@ -3,7 +3,7 @@ import UIKit
 
 extension UIView {
     func cornerCircle() {
-        layer.cornerRadius = frame.height/2
+        layer.cornerRadius = frame.height / 2
     }
     
     func addShadowView(radius: CGFloat) {
@@ -15,4 +15,3 @@ extension UIView {
         }
     }
 }
-

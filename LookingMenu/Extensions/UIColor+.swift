@@ -1,9 +1,15 @@
 import Foundation
 import UIKit
 extension UIColor {
-    func getColorDesignByName(nameColor: String) -> UIColor {
-        guard let color = UIColor(named: nameColor)
-        else { return UIColor() }
-        return color
+    public class var redDesign: UIColor {
+        return UIColor(named: "red") ?? .red
+    }
+    
+    public class var blackDesign: UIColor {
+        return UIColor(named: "black") ?? .black
+    }
+    
+    public class var grayDesign: UIColor {
+        return UIColor(named: "gray") ?? .gray
     }
 }
