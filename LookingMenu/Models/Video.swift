@@ -1,10 +1,10 @@
 import Foundation
 
-struct Videos : Codable {
+struct Videos: Codable {
     let videos: [Video]
 }
 
-struct Video : Codable {
+struct Video: Codable {
     let shortTitle: String
     let youTubeId: String
     let rating: Float
@@ -12,4 +12,3 @@ struct Video : Codable {
     let thumbnail: String
     let length: Int
 }
-

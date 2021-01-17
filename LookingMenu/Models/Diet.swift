@@ -1,4 +1,5 @@
 import Foundation
+
 struct Diet: Codable {
     var id: Int = 1
     var name: String

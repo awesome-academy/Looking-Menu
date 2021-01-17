@@ -1,11 +1,10 @@
 import Foundation
 
-struct Ingredients : Codable {
+struct Ingredients: Codable {
     let ingredients: [Detail]
 }
 
-struct Detail : Codable {
+struct Detail: Codable {
     let name: String
     let image: String
 }
-
