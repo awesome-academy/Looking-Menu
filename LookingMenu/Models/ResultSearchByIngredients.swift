@@ -1,4 +1,5 @@
 import Foundation
+
 struct ResultSearchByIngredients: Codable {
     let id: Int
     let title: String

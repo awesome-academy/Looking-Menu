@@ -1,6 +1,5 @@
 import Foundation
 
-struct Equipments : Codable  {
+struct Equipments: Codable {
     let equipment: [Detail]
 }
-
