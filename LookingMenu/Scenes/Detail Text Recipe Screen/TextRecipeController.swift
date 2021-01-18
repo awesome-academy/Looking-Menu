@@ -16,6 +16,7 @@ final class TextRecipeController: UIViewController{
     }
     
     private func configTextRecipeView() {
+        LoadingView.instance.showLoading()
         guard let recipe = recipeFromDetail else {
             return
         }
@@ -27,6 +28,7 @@ final class TextRecipeController: UIViewController{
                 self.numberServingLabel.text = "\(info.servings)"
                 self.stepTaskRecipe = info.analyzedInstructions[0].steps
                 self.stepTaskTabelView.reloadData()
+                LoadingView.instance.hideLoading()
             }
         }
     }
@@ -37,7 +39,7 @@ final class TextRecipeController: UIViewController{
 }
 
 extension TextRecipeController: UITableViewDelegate,
-                                 UITableViewDataSource {
+                                UITableViewDataSource {
     func tableView(_ tableView: UITableView,
                    numberOfRowsInSection section: Int) -> Int {
         return stepTaskRecipe.count
@@ -46,7 +48,7 @@ extension TextRecipeController: UITableViewDelegate,
     func tableView(_ tableView: UITableView,
                    cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = stepTaskTabelView.dequeueReusableCell(withIdentifier: idStepTaskTabelView,
-                                                        for: indexPath) as? StepTaskCell
+                                                               for: indexPath) as? StepTaskCell
         else { return UITableViewCell() }
         let item = stepTaskRecipe[indexPath.row]
         cell.configStepTaskCell(item: item)

@@ -15,6 +15,7 @@ final class HomeViewController: UIViewController {
     }
     
     private func configHomeView() {
+        LoadingView.instance.showLoading()
         logoApp.cornerCircle()
         navigationController?.setNavigationBarHidden(true, animated: true)
         randomRecipesCollection.register(RecipeRandomCell.self,
@@ -24,6 +25,7 @@ final class HomeViewController: UIViewController {
             DispatchQueue.main.async {
                 self.listRandomRecipes = recipes.recipes
                 self.randomRecipesCollection.reloadData()
+                LoadingView.instance.hideLoading()
             }
         }
     }

@@ -40,6 +40,7 @@ final class SearchViewController: UIViewController {
     }
     
     private func configSearchView() {
+        LoadingView.instance.showLoading()
         if typeSearch == .searchName {
             APIRecipe.apiRecipe.searchRecipeByName(query: keyWord) { [unowned self] result in
                 DispatchQueue.main.async {
@@ -49,6 +50,7 @@ final class SearchViewController: UIViewController {
                     self.resultSearchCollection.isHidden = result.totalResults == 0
                     self.resultSearchCollection.reloadData()
                     self.finishSearchingRecipe()
+                    LoadingView.instance.hideLoading()
                 }
             }
         } else {
@@ -60,6 +62,7 @@ final class SearchViewController: UIViewController {
                     self.resultSearchCollection.isHidden = result.count == 0
                     self.resultSearchCollection.reloadData()
                     self.finishSearchingRecipe()
+                    LoadingView.instance.hideLoading()
                 }
             }
         }

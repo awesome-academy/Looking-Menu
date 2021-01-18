@@ -29,6 +29,7 @@ final class VideoRecipeController: UIViewController {
     }
     
     private func configVideoDetailView() {
+        LoadingView.instance.showLoading()
         guard let recipe = recipeFromDetail else { return }
         let query = recipe.title.components(separatedBy: " ")
         nameRecipeLabel.text = recipe.title
@@ -37,6 +38,7 @@ final class VideoRecipeController: UIViewController {
             DispatchQueue.main.async {
                 self.loadVideoEmbedYoutube(id: video.youTubeId)
                 self.setDataDescriptionVideo(video: video)
+                LoadingView.instance.hideLoading()
             }
         }
     }
