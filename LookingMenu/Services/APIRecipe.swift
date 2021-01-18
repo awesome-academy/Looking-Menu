@@ -29,32 +29,32 @@ final class APIRecipe {
     }
     
     func getRandomRecipe(offset: Int = 5, getListRecipe:
-                            @escaping (_ result : Recipes) -> Void) {
+                            @escaping (_ result: Recipes) -> Void) {
         let urlString = String(format: UrlAPIRecipe.urlGetRecipeRandom, offset)
         getDataToAPIRecipe(from: urlString, completion: getListRecipe)
     }
     
     func searchRecipeByName(query:String, offset: Int = 10, getListRecipe:
-                                @escaping (_ result : ResultSearch) -> Void) {
+                                @escaping (_ result: ResultSearch) -> Void) {
         let urlString = String(format: UrlAPIRecipe.urlSearchRecipeByName, query, offset)
         getDataToAPIRecipe(from: urlString, completion: getListRecipe)
         
     }
     
     func searchVideoByName(query:String, getVideoSearch:
-                            @escaping (_ result : Videos) -> Void) {
+                            @escaping (_ result: Videos) -> Void) {
         let urlString = String(format: UrlAPIRecipe.urlDataVideoRecipe, query)
         getDataToAPIRecipe(from: urlString, completion: getVideoSearch)
     }
     
     func getInformationRecipe(idRecipe: Int, informationRecipe:
-                                @escaping (_ result : Information) -> Void) {
+                                @escaping (_ result: Information) -> Void) {
         let urlString = String(format: UrlAPIRecipe.urlGetDetailRecipe, idRecipe)
         getDataToAPIRecipe(from: urlString, completion: informationRecipe)
     }
     
     func getEquipmentAndIngredient(idRecipe: Int, getIngredientAndEquipment:
-                                    @escaping (_ ingre : Ingredients,_ equip : Equipments) -> Void) {
+                                    @escaping (_ ingre: Ingredients,_ equip: Equipments) -> Void) {
         let urlStrings = [ String(format: UrlAPIRecipe.urlDataIngredient,
                                   idRecipe),
                            String(format: UrlAPIRecipe.urlDataEquipment,
@@ -93,5 +93,16 @@ final class APIRecipe {
             getIngredientAndEquipment(ingredient, equipment)
         }
     }
+    
+    func getRecipesByNutrient(calor: Double, informationRecipe:
+                                @escaping (_ result : [RecipeDiet]) -> Void) {
+        let urlString = String(format: UrlAPIRecipe.urlRecipeNutrient, calor)
+        getDataToAPIRecipe(from: urlString, completion: informationRecipe)
+    }
+    
+    func searchRecipesByIngredient(ingredients: String, resultSeach:
+                                    @escaping (_ result: [ResultSearchByIngredients]) -> Void) {
+        let urlString = String(format: UrlAPIRecipe.urlSearchByIngredients, ingredients)
+        getDataToAPIRecipe(from: urlString, completion: resultSeach)
+    }
 }
-

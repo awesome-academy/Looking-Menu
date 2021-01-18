@@ -1,6 +1,6 @@
 import Foundation
 
-enum HtthpMethod : String {
+enum HtthpMethod: String {
     case Get
     case Post
 }
