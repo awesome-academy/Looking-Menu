@@ -1,58 +1,68 @@
 import UIKit
 
-class TabBarCell: UICollectionViewCell {
-    private var constraintCenterHorizontalIcon : NSLayoutConstraint?
-    private var constraintLeadingIcon : NSLayoutConstraint?
-    private lazy var iconTabbar : UIImageView = {
+private enum ConstantTabBarCell: CGFloat {
+    case sizeTabBarLabel = 13
+    case spaceTabBarBackground = 20
+    case sizeTabBarIcon = 35
+    case spaceTabBarIcon = 5
+}
+
+final class TabBarCell: UICollectionViewCell {
+    private var constraintCenterHorizontalIcon: NSLayoutConstraint?
+    private var constraintLeadingIcon: NSLayoutConstraint?
+    private lazy var tabBarIcon: UIImageView = {
         let imageView = UIImageView()
-        imageView.tintColor = UIColor.getColorDesignByName(nameColor: "red")
+        imageView.tintColor = .grayDesign
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
     }()
     
-    private lazy var labelTabbar : UILabel = {
+    private lazy var tabBarLabel: UILabel = {
         let label = UILabel()
-        label.textColor = UIColor.getColorDesignByName(nameColor: "gray")
-        label.font = UIFont.boldSystemFont(ofSize: 13)
+        label.textColor = .grayDesign
+        label.font = UIFont.boldSystemFont(ofSize: ConstantTabBarCell.sizeTabBarLabel.rawValue)
         label.textAlignment = .center
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
-    private lazy var viewBackgroundTabbar : UIView =  {
+    private lazy var tabBarViewBackground: UIView = {
         let view = UIView()
         view.backgroundColor = .white
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
     
-    override func layoutSubviews() {
+    override init(frame: CGRect) {
+        super.init(frame: frame)
         addViewBackgroundToTabbar()
-        addLabelToViewBackgroundTabbar()
-        addIconToViewBackgroundTabbar()
     }
     
-    func configCell(item : TabBar) {
-        if let image = UIImage(named: item.iconTabbar) {
-            iconTabbar.image = image.withRenderingMode(.alwaysTemplate)
-            labelTabbar.text = item.nameTabbar
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    func configCell(item: TabBar) {
+        if let image = UIImage(named: item.icon) {
+            tabBarIcon.image = image.withRenderingMode(.alwaysTemplate)
+            tabBarLabel.text = item.label
         }
     }
     
     override var isSelected: Bool {
         didSet {
-            let red = UIColor.getColorDesignByName(nameColor: "red")
-            let gray = UIColor.getColorDesignByName(nameColor: "gray")
-            viewBackgroundTabbar.backgroundColor = isSelected ?
+            let red = UIColor.redDesign
+            let gray = UIColor.grayDesign
+            tabBarViewBackground.backgroundColor = isSelected ?
                 red.withAlphaComponent(0.4) : .white
             if let horizontalIcon = constraintCenterHorizontalIcon,
                let leftIcon = constraintLeadingIcon {
                 horizontalIcon.isActive = !isSelected
                 leftIcon.isActive = isSelected
             }
-            iconTabbar.tintColor = isSelected ? red : gray
-            labelTabbar.textColor = isSelected ? red : gray
-            labelTabbar.isHidden = !isSelected
+            tabBarIcon.tintColor = isSelected ? red : gray
+            tabBarLabel.textColor = isSelected ? red : gray
+            tabBarLabel.isHidden = !isSelected
             animationIconItemTabBarSelected()
         }
     }
@@ -64,41 +74,44 @@ class TabBarCell: UICollectionViewCell {
     }
     
     private func addViewBackgroundToTabbar() {
-        addSubview(viewBackgroundTabbar)
-        viewBackgroundTabbar.contentHuggingPriority(for: .horizontal)
+        addSubview(tabBarViewBackground)
+        tabBarViewBackground.contentHuggingPriority(for: .horizontal)
         NSLayoutConstraint.activate([
-            viewBackgroundTabbar.topAnchor.constraint(
+            tabBarViewBackground.topAnchor.constraint(
                 equalTo: topAnchor,
-                constant: 20),
-            viewBackgroundTabbar.widthAnchor.constraint(
+                constant: ConstantTabBarCell.spaceTabBarBackground.rawValue),
+            tabBarViewBackground.widthAnchor.constraint(
                 equalToConstant: frame.width),
-            viewBackgroundTabbar.bottomAnchor.constraint(
+            tabBarViewBackground.bottomAnchor.constraint(
                 equalTo: bottomAnchor,
-                constant: -20)
+                constant: -ConstantTabBarCell.spaceTabBarBackground.rawValue)
         ])
-        viewBackgroundTabbar.layer.cornerRadius = (frame.height - 40) / 2
+        tabBarViewBackground.layer.cornerRadius =
+            (frame.height - (ConstantTabBarCell.spaceTabBarBackground.rawValue * 2)) / 2
+        addIconTotabBarViewBackground()
+        addLabelTotabBarViewBackground()
     }
     
-    private func addLabelToViewBackgroundTabbar() {
-        viewBackgroundTabbar.addSubview(labelTabbar)
+    private func addLabelTotabBarViewBackground() {
+        tabBarViewBackground.addSubview(tabBarLabel)
         NSLayoutConstraint.activate([
-            labelTabbar.leadingAnchor.constraint(
-                equalTo: iconTabbar.trailingAnchor,
-                constant: 5),
-            labelTabbar.trailingAnchor.constraint(
-                equalTo: viewBackgroundTabbar.trailingAnchor),
-            labelTabbar.centerYAnchor.constraint(
-                equalTo: iconTabbar.centerYAnchor)
+            tabBarLabel.leadingAnchor.constraint(
+                equalTo: tabBarIcon.trailingAnchor,
+                constant: ConstantTabBarCell.spaceTabBarIcon.rawValue),
+            tabBarLabel.trailingAnchor.constraint(
+                equalTo: tabBarViewBackground.trailingAnchor),
+            tabBarLabel.centerYAnchor.constraint(
+                equalTo: tabBarIcon.centerYAnchor)
         ])
-        labelTabbar.isHidden = true
+        tabBarLabel.isHidden = true
     }
     
-    private func addIconToViewBackgroundTabbar() {
-        viewBackgroundTabbar.addSubview(iconTabbar)
-        constraintLeadingIcon = iconTabbar.leadingAnchor.constraint(
-            equalTo: viewBackgroundTabbar.leadingAnchor,
-            constant: 5)
-        constraintCenterHorizontalIcon = iconTabbar.centerXAnchor.constraint(
+    private func addIconTotabBarViewBackground() {
+        tabBarViewBackground.addSubview(tabBarIcon)
+        constraintLeadingIcon = tabBarIcon.leadingAnchor.constraint(
+            equalTo: tabBarViewBackground.leadingAnchor,
+            constant: ConstantTabBarCell.spaceTabBarIcon.rawValue)
+        constraintCenterHorizontalIcon = tabBarIcon.centerXAnchor.constraint(
             equalTo: centerXAnchor)
         if let horizontalIcon = constraintCenterHorizontalIcon,
            let leftIcon = constraintLeadingIcon {
@@ -106,13 +119,12 @@ class TabBarCell: UICollectionViewCell {
             leftIcon.isActive = false
         }
         NSLayoutConstraint.activate([
-            iconTabbar.widthAnchor.constraint(
-                equalToConstant: 35),
-            iconTabbar.heightAnchor.constraint(
-                equalToConstant: 35),
-            iconTabbar.centerYAnchor.constraint(
-                equalTo: viewBackgroundTabbar.centerYAnchor)
+            tabBarIcon.widthAnchor.constraint(
+                equalToConstant: ConstantTabBarCell.sizeTabBarIcon.rawValue),
+            tabBarIcon.heightAnchor.constraint(
+                equalToConstant: ConstantTabBarCell.sizeTabBarIcon.rawValue),
+            tabBarIcon.centerYAnchor.constraint(
+                equalTo: tabBarViewBackground.centerYAnchor)
         ])
     }
 }
-

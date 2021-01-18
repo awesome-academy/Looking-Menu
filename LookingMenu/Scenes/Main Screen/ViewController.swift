@@ -9,24 +9,24 @@ final class ViewController: UIViewController {
     
     private let idTabBarCell = "TabBarCell"
     private var widthOfTabBarCollection = CGFloat()
-    private let heightOfTabBarCollection : CGFloat = 100.0
+    private let heightOfTabBarCollection: CGFloat = 100.0
     
-    private let tabBars : [TabBar] = [
+    private let tabBars: [TabBar] = [
         TabBar(
-            iconTabbar: "home",
-            nameTabbar: "Home"
+            icon: "home",
+            label: "Home"
         ),
         TabBar(
-            iconTabbar: "favorite",
-            nameTabbar: "Saved"
+            icon: "favorite",
+            label: "Saved"
         ),
         TabBar(
-            iconTabbar: "circular",
-            nameTabbar: "Diet"
+            icon: "circular",
+            label: "Diet"
         ),
         TabBar(
-            iconTabbar: "vegetarian",
-            nameTabbar: "Items"
+            icon: "vegetarian",
+            label: "Items"
         )
     ]
     
@@ -40,6 +40,7 @@ final class ViewController: UIViewController {
         [ containerFavoriteView,
           containerDietView,
           containerIngredientView].forEach { $0?.isHidden = true }
+        navigationController?.setNavigationBarHidden(true, animated: true)
     }
     
     private func configureTabBar() {
@@ -54,3 +55,40 @@ final class ViewController: UIViewController {
     }
 }
 
+extension ViewController: UICollectionViewDelegate,
+                          UICollectionViewDataSource,
+                          UICollectionViewDelegateFlowLayout {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return tabBars.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        sizeForItemAt indexPath: IndexPath) -> CGSize {
+        return CGSize(
+            width: widthOfTabBarCollection,
+            height: heightOfTabBarCollection)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView,
+                        cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let item = tabBars[indexPath.row]
+        let cell = tabBarCollection.dequeueReusableCell(
+            withReuseIdentifier: idTabBarCell,
+            for: indexPath) as? TabBarCell
+        guard let myCell = cell else { return UICollectionViewCell() }
+        myCell.configCell(item: item)
+        return myCell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView,
+                        didSelectItemAt indexPath: IndexPath) {
+        let arr = [ containerHomeView,
+                    containerFavoriteView,
+                    containerDietView,
+                    containerIngredientView]
+        for index in 0..<arr.count {
+            arr[index]?.isHidden = !(index == indexPath.item)
+        }
+    }
+}
