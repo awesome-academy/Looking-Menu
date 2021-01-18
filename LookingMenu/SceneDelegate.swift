@@ -7,7 +7,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                options connectionOptions: UIScene.ConnectionOptions) {
         let windowScene = UIWindowScene(session: session, connectionOptions: connectionOptions)
         self.window = UIWindow(windowScene: windowScene)
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let storyboard = UIStoryboard(
+            name: StoryBoardReference.mainStoryBoard, bundle: nil)
         let status = UserDefaults.standard.bool(
             forKey: KeyUserDefaults.keyCheckNewUser)
         guard let mainVC = storyboard.instantiateViewController(
@@ -20,4 +21,3 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         self.window?.makeKeyAndVisible()
     }
 }
-

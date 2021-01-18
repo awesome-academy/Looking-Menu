@@ -9,16 +9,17 @@ final class WelcomeViewController: UIViewController {
     }
     
     private func navigationMainView() {
-        guard let mainVC = self.storyboard?.instantiateViewController(
+        guard let mainVC = storyboard?.instantiateViewController(
                 withIdentifier: IdStoryBoardViews.mainVC)
                 as? ViewController else { return }
-        self.navigationController?.pushViewController(mainVC, animated: true)
+        UIApplication.shared.windows.first?.rootViewController = mainVC
+        UIApplication.shared.windows.first?.makeKeyAndVisible()
     }
     
     private func configWelcomeView() {
         iconLogo.cornerCircle()
         navigationController?.setNavigationBarHidden(true, animated: true)
-        buttonStated.layer.cornerRadius = buttonStated.frame.height / 2
+        buttonStated.cornerCircle()
     }
     
     @IBAction private func goMainView(_ sender: Any) {
