@@ -1,4 +1,5 @@
 import UIKit
+
 final class HomeViewController: UIViewController {
     @IBOutlet private weak var logoApp: UIImageView!
     @IBOutlet private weak var searchBar: UISearchBar!
@@ -15,6 +16,7 @@ final class HomeViewController: UIViewController {
     
     private func configHomeView() {
         logoApp.cornerCircle()
+        navigationController?.setNavigationBarHidden(true, animated: true)
         randomRecipesCollection.register(RecipeRandomCell.self,
                                          forCellWithReuseIdentifier: idRandomRecipesCell)
         randomRecipesCollection.collectionViewLayout.invalidateLayout()
@@ -28,7 +30,7 @@ final class HomeViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        sizeItemCollection.height = randomRecipesCollection.frame.height
+        sizeItemCollection.height = randomRecipesCollection.frame.height * 0.9
         sizeItemCollection.width = randomRecipesCollection.frame.width / 1.5
     }
 }
@@ -50,12 +52,12 @@ extension HomeViewController : UICollectionViewDelegate,
     
     func collectionView(_ collectionView: UICollectionView,
                         didSelectItemAt indexPath: IndexPath) {
-        guard let detailVC = storyboard?.instantiateViewController(
-                withIdentifier: IdStoryBoardViews.detailRecipe)
+        let detailStoryBoard = UIStoryboard(name: StoryBoardReference.detailStoryBoard, bundle:nil)
+        guard let detailVC = detailStoryBoard.instantiateViewController(
+                withIdentifier: IdStoryBoardViews.detailRecipeVC)
                 as? DetailRecipeController
         else { return }
-        let item = listRandomRecipes[indexPath.row]
-        detailVC.recipe = item
+        detailVC.recipe = listRandomRecipes[indexPath.row]
         self.navigationController?.pushViewController(detailVC, animated: true)
     }
     
@@ -65,19 +67,20 @@ extension HomeViewController : UICollectionViewDelegate,
                 withReuseIdentifier: idRandomRecipesCell,
                 for: indexPath) as? RecipeRandomCell
         else { return UICollectionViewCell() }
-        let item = listRandomRecipes[indexPath.row]
-        cell.configItemRecipeRandom(item : item)
+        cell.configItemRecipeRandom(item: listRandomRecipes[indexPath.row])
         return cell
     }
 }
 
-extension HomeViewController : UISearchBarDelegate {
+extension HomeViewController: UISearchBarDelegate {
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        guard let searchVC = storyboard?.instantiateViewController(
-                withIdentifier: IdStoryBoardViews.search) as? SearchViewController,
+        let homeStoryBoard = UIStoryboard(name: StoryBoardReference.homeStoryBoard, bundle:nil)
+        guard let searchVC = homeStoryBoard.instantiateViewController(
+                withIdentifier: IdStoryBoardViews.searchVC) as? SearchViewController,
               let textSearch = searchBar.text
         else { return }
         searchVC.keyWord = textSearch
+        searchVC.typeSearch = .searchName
         self.navigationController?.pushViewController(searchVC, animated: true)
     }
 }

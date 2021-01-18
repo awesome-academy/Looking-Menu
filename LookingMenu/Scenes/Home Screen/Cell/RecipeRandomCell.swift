@@ -1,6 +1,6 @@
 import UIKit
 
-private enum ConstantRecipeRandomCelll : CGFloat {
+private enum ConstantRecipeRandomCelll: CGFloat {
     case radiusView = 30
     case constantAnchor = 4
     case multiplierWidthBackGroundView = 0.75
@@ -11,7 +11,7 @@ private enum ConstantRecipeRandomCelll : CGFloat {
 final class RecipeRandomCell: UICollectionViewCell {
     let fontSizeTitle = 24
     let fontSizeMinute = 16
-    lazy private var backgroundViewRecipeCell : UIView = {
+    lazy private var recipeCellBackgroundView: UIView = {
         let view = UIView()
         view.backgroundColor = .white
         view.layer.cornerRadius = ConstantRecipeRandomCelll.radiusView.rawValue
@@ -19,104 +19,104 @@ final class RecipeRandomCell: UICollectionViewCell {
         return view
     }()
     
-    lazy private var labelMinute : UILabel = {
-        let lb = UILabel()
-        lb.setUpLabelCell(fontSize: fontSizeMinute)
-        return lb
+    lazy private var minuteLabel: UILabel = {
+        let label = UILabel()
+        label.setUpLabelCell(fontSize: fontSizeMinute)
+        return label
     }()
     
-    lazy private var labelTitle : UILabel = {
-        let lb = UILabel()
-        lb.setUpLabelCell(fontSize: fontSizeTitle)
-        lb.numberOfLines = 3
-        return lb
+    lazy private var titleLabel: UILabel = {
+        let label = UILabel()
+        label.setUpLabelCell(fontSize: fontSizeTitle)
+        label.numberOfLines = 3
+        return label
     }()
     
-    lazy private var imageOfRecipe : UIImageView = {
-        let iv = UIImageView()
-        iv.layer.cornerRadius = ConstantRecipeRandomCelll.radiusView.rawValue
-        iv.layer.masksToBounds = true
-        iv.translatesAutoresizingMaskIntoConstraints = false
-        return iv
+    lazy private var recipeImageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.layer.cornerRadius = ConstantRecipeRandomCelll.radiusView.rawValue
+        imageView.layer.masksToBounds = true
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        return imageView
     }()
     
     override func layoutSubviews() {
         super.layoutSubviews()
         addBackgroundView()
         addImageRecipe()
-        addLabelMinuteCook()
-        addLabelTitleRecipe()
+        addminuteLabelCook()
+        addtitleLabelRecipe()
     }
     
-    func configItemRecipeRandom(item : Recipe) {
-        imageOfRecipe.getImageFromURL(imgURL: item.image)
-        labelTitle.text = item.title
-        labelMinute.text = "\(item.readyInMinutes) Minute"
+    func configItemRecipeRandom(item: Recipe) {
+        recipeImageView.getImageFromURL(imgURL: item.image)
+        titleLabel.text = item.title
+        minuteLabel.text = "\(item.readyInMinutes) Minute"
     }
     
     private func addBackgroundView() {
-        addSubview(backgroundViewRecipeCell)
+        addSubview(recipeCellBackgroundView)
         NSLayoutConstraint.activate([
-            backgroundViewRecipeCell.centerYAnchor.constraint(equalTo: centerYAnchor),
-            backgroundViewRecipeCell.centerXAnchor.constraint(equalTo: centerXAnchor),
-            backgroundViewRecipeCell.widthAnchor.constraint(
+            recipeCellBackgroundView.centerYAnchor.constraint(equalTo: centerYAnchor),
+            recipeCellBackgroundView.centerXAnchor.constraint(equalTo: centerXAnchor),
+            recipeCellBackgroundView.widthAnchor.constraint(
                 equalToConstant:
-                    frame.width - ( ConstantRecipeRandomCelll.constantAnchor.rawValue * 4 )),
-            backgroundViewRecipeCell.heightAnchor.constraint(
+                    frame.width - (ConstantRecipeRandomCelll.constantAnchor.rawValue * 4)),
+            recipeCellBackgroundView.heightAnchor.constraint(
                 equalToConstant:
                     frame.height * ConstantRecipeRandomCelll.multiplierWidthBackGroundView.rawValue)
         ])
-        backgroundViewRecipeCell.addShadowView(radius: ConstantRecipeRandomCelll.radiusView.rawValue)
+        recipeCellBackgroundView.addShadowView(radius: ConstantRecipeRandomCelll.radiusView.rawValue)
     }
     
     private func addImageRecipe() {
-        backgroundViewRecipeCell.addSubview(imageOfRecipe)
+        recipeCellBackgroundView.addSubview(recipeImageView)
         NSLayoutConstraint.activate([
-            imageOfRecipe.topAnchor.constraint(
-                equalTo: backgroundViewRecipeCell.topAnchor,
+            recipeImageView.topAnchor.constraint(
+                equalTo: recipeCellBackgroundView.topAnchor,
                 constant:
-                    -( frame.width * ConstantRecipeRandomCelll.multiplierTopImageRecipe.rawValue )),
-            imageOfRecipe.centerXAnchor.constraint(equalTo: backgroundViewRecipeCell.centerXAnchor),
-            imageOfRecipe.widthAnchor.constraint(
+                    -(frame.width * ConstantRecipeRandomCelll.multiplierTopImageRecipe.rawValue)),
+            recipeImageView.centerXAnchor.constraint(equalTo: recipeCellBackgroundView.centerXAnchor),
+            recipeImageView.widthAnchor.constraint(
                 equalToConstant:
-                    frame.width - ( ConstantRecipeRandomCelll.constantAnchor.rawValue * 10 )),
-            imageOfRecipe.heightAnchor.constraint(
+                    frame.width - (ConstantRecipeRandomCelll.constantAnchor.rawValue * 10)),
+            recipeImageView.heightAnchor.constraint(
                 equalToConstant:
                     frame.height * ConstantRecipeRandomCelll.multiplierHeightImageRecipe.rawValue)
         ])
     }
     
-    private func addLabelTitleRecipe() {
-        backgroundViewRecipeCell.addSubview(labelTitle)
-        labelTitle.textColor = .blackDesign
+    private func addtitleLabelRecipe() {
+        recipeCellBackgroundView.addSubview(titleLabel)
+        titleLabel.textColor = .blackDesign
         NSLayoutConstraint.activate([
-            labelTitle.topAnchor.constraint(
-                equalTo: imageOfRecipe.bottomAnchor,
+            titleLabel.topAnchor.constraint(
+                equalTo: recipeImageView.bottomAnchor,
                 constant: ConstantRecipeRandomCelll.constantAnchor.rawValue),
-            labelTitle.leadingAnchor.constraint(
-                equalTo: backgroundViewRecipeCell.leadingAnchor,
+            titleLabel.leadingAnchor.constraint(
+                equalTo: recipeCellBackgroundView.leadingAnchor,
                 constant: ConstantRecipeRandomCelll.constantAnchor.rawValue),
-            labelTitle.trailingAnchor.constraint(
-                equalTo: backgroundViewRecipeCell.trailingAnchor,
+            titleLabel.trailingAnchor.constraint(
+                equalTo: recipeCellBackgroundView.trailingAnchor,
                 constant: -ConstantRecipeRandomCelll.constantAnchor.rawValue),
-            labelTitle.bottomAnchor.constraint(
-                equalTo: labelMinute.topAnchor,
+            titleLabel.bottomAnchor.constraint(
+                equalTo: minuteLabel.topAnchor,
                 constant: ConstantRecipeRandomCelll.constantAnchor.rawValue)
         ])
     }
     
-    private func addLabelMinuteCook() {
-        backgroundViewRecipeCell.addSubview(labelMinute)
-        labelMinute.textColor = .redDesign
+    private func addminuteLabelCook() {
+        recipeCellBackgroundView.addSubview(minuteLabel)
+        minuteLabel.textColor = .redDesign
         NSLayoutConstraint.activate([
-            labelMinute.bottomAnchor.constraint(
-                equalTo: backgroundViewRecipeCell.bottomAnchor,
-                constant: -( ConstantRecipeRandomCelll.constantAnchor.rawValue * 2 )),
-            labelMinute.leadingAnchor.constraint(
-                equalTo: backgroundViewRecipeCell.leadingAnchor,
+            minuteLabel.bottomAnchor.constraint(
+                equalTo: recipeCellBackgroundView.bottomAnchor,
+                constant: -(ConstantRecipeRandomCelll.constantAnchor.rawValue * 2)),
+            minuteLabel.leadingAnchor.constraint(
+                equalTo: recipeCellBackgroundView.leadingAnchor,
                 constant: ConstantRecipeRandomCelll.constantAnchor.rawValue),
-            labelMinute.trailingAnchor.constraint(
-                equalTo: backgroundViewRecipeCell.trailingAnchor,
+            minuteLabel.trailingAnchor.constraint(
+                equalTo: recipeCellBackgroundView.trailingAnchor,
                 constant: -ConstantRecipeRandomCelll.constantAnchor.rawValue)
         ])
     }

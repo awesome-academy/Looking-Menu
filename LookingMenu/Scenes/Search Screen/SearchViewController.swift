@@ -2,7 +2,13 @@ import UIKit
 
 private enum ConstantSearchView {
     static let radiusView: CGFloat = 20
-    static let constantAnchor: CGFloat = 4
+    static let constantAnchor: CGFloat = -60
+    static let multipleCollectionSize = 2.5
+}
+
+enum TypeSearch {
+    case searchName
+    case searchIngredient
 }
 
 final class SearchViewController: UIViewController {
@@ -14,7 +20,9 @@ final class SearchViewController: UIViewController {
     @IBOutlet private weak var constrantBottomSlideView: NSLayoutConstraint!
     let idResultSearchCell = "ResultSearchCell"
     var keyWord : String = ""
-    var listResultSearch = [Recipe]()
+    var typeSearch = TypeSearch.searchName
+    var listResultSearchByName = [Recipe]()
+    var listResultSearchByIngredients = [ResultSearchByIngredients]()
     var sizeSeachCellCollection = (width: CGFloat(),
                                    height: CGFloat())
     
@@ -25,19 +33,32 @@ final class SearchViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        sizeSeachCellCollection.height = view.frame.height / 3
-        sizeSeachCellCollection.width = view.frame.width / 2.5
+        sizeSeachCellCollection.height = view.frame.height / ConstantSearchView.multipleCollectionSize
+        sizeSeachCellCollection.width = view.frame.width / ConstantSearchView.multipleCollectionSize
     }
     
     private func configSearchView() {
-        APIRecipe.apiRecipe.searchRecipeByName(query: keyWord) { [unowned self] result in
-            DispatchQueue.main.async {
-                self.listResultSearch = result.results
-                self.labelTotalResult.text = "Found \(result.totalResults) results"
-                self.viewRecipeNotFound.isHidden = result.totalResults != 0
-                self.resultSearchCollection.isHidden = result.totalResults == 0
-                self.resultSearchCollection.reloadData()
-                self.finishSearchingRecipe()
+        if typeSearch == .searchName {
+            APIRecipe.apiRecipe.searchRecipeByName(query: keyWord) { [unowned self] result in
+                DispatchQueue.main.async {
+                    self.listResultSearchByName = result.results
+                    self.labelTotalResult.text = "Found \(result.totalResults) results"
+                    self.viewRecipeNotFound.isHidden = result.totalResults != 0
+                    self.resultSearchCollection.isHidden = result.totalResults == 0
+                    self.resultSearchCollection.reloadData()
+                    self.finishSearchingRecipe()
+                }
+            }
+        } else {
+            APIRecipe.apiRecipe.searchRecipesByIngredient(ingredients: keyWord) { [unowned self] result in
+                DispatchQueue.main.async {
+                    listResultSearchByIngredients = result
+                    labelTotalResult.isHidden = true
+                    self.viewRecipeNotFound.isHidden = result.count != 0
+                    self.resultSearchCollection.isHidden = result.count == 0
+                    self.resultSearchCollection.reloadData()
+                    self.finishSearchingRecipe()
+                }
             }
         }
         setUpCollectionViewItemLayout()
@@ -65,26 +86,45 @@ final class SearchViewController: UIViewController {
     }
 }
 
-extension SearchViewController : UICollectionViewDelegate,
-                                 UICollectionViewDataSource {
+extension SearchViewController: UICollectionViewDelegate,
+                                UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView,
                         numberOfItemsInSection section: Int) -> Int {
-        return listResultSearch.count
+        return typeSearch == .searchName ? listResultSearchByName.count
+            : listResultSearchByIngredients.count
     }
     
     func collectionView(_ collectionView: UICollectionView,
                         cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = resultSearchCollection.dequeueReusableCell(withReuseIdentifier: idResultSearchCell, for: indexPath)
-                as? ResultSearchCell else { return UICollectionViewCell() }
-        cell.configSearchCell(item: listResultSearch[indexPath.row])
+        guard let cell = resultSearchCollection.dequeueReusableCell(withReuseIdentifier: idResultSearchCell, for: indexPath) as? ResultSearchCell
+        else { return UICollectionViewCell() }
+        if typeSearch == .searchName {
+            let item = listResultSearchByName[indexPath.row]
+            cell.configSearchCell(image: String(format: UrlAPIRecipe.urlImageRecipe,
+                                                item.image),
+                                  title: item.title,
+                                  minute: "\(item.readyInMinutes) Minute")
+        } else {
+            let item = listResultSearchByIngredients[indexPath.row]
+            cell.configSearchCell(image: item.image,
+                                  title: item.title,
+                                  minute: "Like : \(item.likes)")
+        }
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView,
                         didSelectItemAt indexPath: IndexPath) {
-        guard let detailVC = self.storyboard?.instantiateViewController(withIdentifier: IdStoryBoardViews.detailRecipe)
+        let detailStoryBoard = UIStoryboard(name: StoryBoardReference.detailStoryBoard, bundle:nil)
+        guard let detailVC = detailStoryBoard.instantiateViewController(withIdentifier: IdStoryBoardViews.detailRecipeVC)
                 as? DetailRecipeController else { return }
-        detailVC.recipe = listResultSearch[indexPath.row]
+        detailVC.recipe = typeSearch == .searchName
+            ? listResultSearchByName[indexPath.row]
+            : Recipe (
+                id: listResultSearchByIngredients[indexPath.row].id,
+                title: listResultSearchByIngredients[indexPath.row].title,
+                readyInMinutes: listResultSearchByIngredients[indexPath.row].likes,
+                image: listResultSearchByIngredients[indexPath.row].image)
         self.navigationController?.pushViewController(detailVC, animated: true)
     }
 }
@@ -96,4 +136,3 @@ extension SearchViewController: CustomSearchDelegate {
                       height: sizeSeachCellCollection.height)
     }
 }
-
