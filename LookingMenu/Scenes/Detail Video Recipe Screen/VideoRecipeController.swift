@@ -1,5 +1,6 @@
 import UIKit
 import WebKit
+
 final class VideoRecipeController: UIViewController {
     @IBOutlet private weak var nameRecipeLabel: UILabel!
     @IBOutlet private weak var videoEmbedYoutubeWebView: WKWebView!
@@ -7,7 +8,7 @@ final class VideoRecipeController: UIViewController {
     @IBOutlet private weak var ratingVideoLabel: UILabel!
     @IBOutlet private weak var viewVideoLabel: UILabel!
     @IBOutlet private weak var lengthVideoLabel: UILabel!
-    var recipeFromDetail : Recipe?
+    var recipeFromDetail: Recipe?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -15,10 +16,10 @@ final class VideoRecipeController: UIViewController {
     }
     
     func setDataDescriptionVideo(video: Video) {
-        labelTitleVideo.text = video.shortTitle
-        labelRatingVideo.text = "\(video.rating)"
-        labelViewVideo.text = "\(video.views)"
-        labelLengthVideo.text = "\(convertSecondToMinute(totalVideoDuration: video.length))"
+        titleVideoLabel.text = video.shortTitle
+        ratingVideoLabel.text = "\(video.rating)"
+        viewVideoLabel.text = "\(video.views)"
+        lengthVideoLabel.text = "\(convertSecondToMinute(totalVideoDuration: video.length))"
     }
     
     private func convertSecondToMinute(totalVideoDuration: Int) -> String {
@@ -30,7 +31,7 @@ final class VideoRecipeController: UIViewController {
     private func configVideoDetailView() {
         guard let recipe = recipeFromDetail else { return }
         let query = recipe.title.components(separatedBy: " ")
-        labelNameRecipe.text = recipe.title
+        nameRecipeLabel.text = recipe.title
         APIRecipe.apiRecipe.searchVideoByName(query: query[0]) { [unowned self] result in
             guard let video = result.videos.first else { return }
             DispatchQueue.main.async {
@@ -40,12 +41,12 @@ final class VideoRecipeController: UIViewController {
         }
     }
     
-    func loadVideoEmbedYoutube(id: String) {
+    private func loadVideoEmbedYoutube(id: String) {
         guard let myUrl = URL(string:
                                 String(format: UrlAPIRecipe.urlEmbebYoutube, id))
         else { return }
         let request = URLRequest(url: myUrl)
-        videoEmbedYoutube.load(request)
+        videoEmbedYoutubeWebView.load(request)
     }
     
     @IBAction private func goBackDetailRecipe(_ sender: Any) {

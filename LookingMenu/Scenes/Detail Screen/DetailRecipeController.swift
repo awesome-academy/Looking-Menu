@@ -13,12 +13,18 @@ final class DetailRecipeController: UIViewController {
     @IBOutlet private weak var ingredientTableView: UITableView!
     @IBOutlet private weak var equipmentTableView: UITableView!
     @IBOutlet private weak var bottomBarView: UIView!
+    @IBOutlet weak var recipeFavouriteButton: UIButton!
     
-    var recipe : Recipe?
+    var recipe: Recipe?
     private var ingredients = [Detail]()
     private var equipments = [Detail]()
+    private var checkRecipeFavourite = false
+    let sqlite3 = SQLiteService()
     private let idTableIngredient = "TableIngredient"
     private let idTableEquipment = "TableEquipment"
+    private let detailStoryBoard = UIStoryboard(name: StoryBoardReference.detailStoryBoard,
+                                                bundle: nil)
+    private let heightTableCell: CGFloat = 90
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -32,9 +38,9 @@ final class DetailRecipeController: UIViewController {
         if recipe.image.contains("recipeImages") {
             recipeImage.getImageFromURL(imgURL: recipe.image)
         } else {
-            recipeImage.getImageFromURL(imgURL:
-                                            String(format: UrlAPIRecipe.urlImageRecipe,
-                                                   recipe.image))
+            recipeImage.getImageFromURL(
+                imgURL: String(format: UrlAPIRecipe.urlImageRecipe,
+                               recipe.image))
         }
         nameRecipeLabel.text = recipe.title
         minuteCookingLabel.text = "\(recipe.readyInMinutes) minute"
@@ -42,9 +48,17 @@ final class DetailRecipeController: UIViewController {
     
     private func configDetailRecipeView() {
         guard let recipe = recipe else { return }
-        bottomBarView.layer.cornerRadius = bottomBarView.frame.height / 2
-        goDetailRecipeTextButton.cornerCircle()
-        goDetailRecipeVideoButton.cornerCircle()
+        checkRecipeFavourite = sqlite3.checkRecipeFavourite(
+            idDiet: recipe.id)
+        recipeFavouriteButton.setBackgroundImage(UIImage(systemName: checkRecipeFavourite ?
+                                                            "heart.fill" :
+                                                            "heart"
+        ), for: .normal)
+        [ bottomBarView,
+          goDetailRecipeTextButton,
+          goDetailRecipeVideoButton].forEach {
+            $0?.cornerCircle()
+          }
         
         APIRecipe.apiRecipe.getEquipmentAndIngredient(idRecipe: recipe.id) { [unowned self]
             (ingredient, equipment) in
@@ -61,15 +75,15 @@ final class DetailRecipeController: UIViewController {
         }
         
         ingredientTableView.register(DetailRecipeCell.self,
-                              forCellReuseIdentifier: idTableIngredient)
+                                     forCellReuseIdentifier: idTableIngredient)
         equipmentTableView.register(DetailRecipeCell.self,
-                             forCellReuseIdentifier: idTableEquipment)
+                                    forCellReuseIdentifier: idTableEquipment)
         ingredientTableView.alpha = 0.0
     }
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        recipeImage.layer.cornerRadius = recipeImage.frame.width / 2
+        recipeImage.cornerCircle()
     }
     
     private func addEventLabel() {
@@ -100,21 +114,41 @@ final class DetailRecipeController: UIViewController {
     }
     
     @IBAction private func goViewTextRecipe(_ sender: Any) {
-        guard let textVC = storyboard?
+        guard let textVC = detailStoryBoard
                 .instantiateViewController(
-                    withIdentifier: IdStoryBoardViews.textRecipe)
+                    withIdentifier: IdStoryBoardViews.textRecipeVC)
                 as? TextRecipeController else { return }
-        textVC.recipe = recipe
+        textVC.recipeFromDetail = recipe
         navigationController?.pushViewController(textVC, animated: true)
     }
     
     @IBAction private func goViewVideoRecipe(_ sender: Any) {
-        guard let videoVC = self.storyboard?
+        guard let videoVC = detailStoryBoard
                 .instantiateViewController(
-                    withIdentifier: IdStoryBoardViews.videoRecipe)
+                    withIdentifier: IdStoryBoardViews.videoRecipeVC)
                 as?  VideoRecipeController else { return }
         videoVC.recipeFromDetail = recipe
         navigationController?.pushViewController(videoVC, animated: true)
+    }
+    
+    @IBAction private func addRecipeFavourite(_ sender: Any) {
+        checkRecipeFavourite.toggle()
+        guard let recipe = recipe else { return }
+        if checkRecipeFavourite {
+            sqlite3.insertRecipeFavourite(id: recipe.id,
+                                          title: recipe.title,
+                                          readyInMinutes: recipe.readyInMinutes,
+                                          image: recipe.image.contains("recipeImages")
+                                            ? recipe.image
+                                            : String(format: UrlAPIRecipe.urlImageRecipe,
+                                                     recipe.image))
+        } else {
+            sqlite3.deleteDietFavourite(idDiet: recipe.id)
+        }
+        recipeFavouriteButton.setBackgroundImage(UIImage(systemName: checkRecipeFavourite
+                                                            ? "heart.fill"
+                                                            : "heart"
+        ), for: .normal)
     }
     
     @IBAction func goBackView(_ sender: Any) {
@@ -122,15 +156,15 @@ final class DetailRecipeController: UIViewController {
     }
 }
 
-extension DetailRecipeController : UITableViewDelegate,
-                                   UITableViewDataSource {
+extension DetailRecipeController: UITableViewDelegate,
+                                  UITableViewDataSource {
     func tableView(_ tableView: UITableView,
                    numberOfRowsInSection section: Int) -> Int {
         return tableView == ingredientTableView ? ingredients.count : equipments.count
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return UITableView.automaticDimension
+        return heightTableCell
     }
     
     func tableView(_ tableView: UITableView,

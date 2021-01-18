@@ -5,7 +5,8 @@ final class TextRecipeController: UIViewController{
     @IBOutlet private weak var priceRecipeLabel: UILabel!
     @IBOutlet private weak var numberServingLabel: UILabel!
     @IBOutlet private weak var stepTaskTabelView: UITableView!
-    var recipeFromDetail : Recipe?
+    
+    var recipeFromDetail: Recipe?
     var stepTaskRecipe = [Step]()
     private let idStepTaskTabelView = "StepTaskTableView"
     
@@ -35,7 +36,7 @@ final class TextRecipeController: UIViewController{
     }
 }
 
-extension TextRecipeController : UITableViewDelegate,
+extension TextRecipeController: UITableViewDelegate,
                                  UITableViewDataSource {
     func tableView(_ tableView: UITableView,
                    numberOfRowsInSection section: Int) -> Int {
