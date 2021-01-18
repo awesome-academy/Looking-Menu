@@ -22,8 +22,7 @@ final class DetailRecipeController: UIViewController {
     let sqlite3 = SQLiteService()
     private let idTableIngredient = "TableIngredient"
     private let idTableEquipment = "TableEquipment"
-    private let detailStoryBoard = UIStoryboard(name: StoryBoardReference.detailStoryBoard,
-                                                bundle: nil)
+    private let detailStoryBoard = StoryBoardReference.detail.storyBoard
     private let heightTableCell: CGFloat = 90
     
     override func viewDidLoad() {

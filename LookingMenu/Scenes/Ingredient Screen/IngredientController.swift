@@ -76,8 +76,7 @@ final class IngredientController: UIViewController {
     }
     
     @IBAction private func goToViewSearch(_ sender: Any) {
-        let homeStoryBoard = UIStoryboard(name: StoryBoardReference.homeStoryBoard, bundle:nil)
-        guard let searchVC = homeStoryBoard.instantiateViewController(
+        guard let searchVC = StoryBoardReference.home.storyBoard.instantiateViewController(
                 withIdentifier: IdStoryBoardViews.searchVC) as? SearchViewController
         else { return }
         searchVC.keyWord = ingredients.joined(separator: ",")

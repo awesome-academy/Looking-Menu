@@ -2,8 +2,8 @@ import UIKit
 
 private enum ConstantSearchView {
     static let radiusView: CGFloat = 20
-    static let constantAnchor: CGFloat = -60
-    static let multipleCollectionSize = 2.5
+    static let constantAnchor: CGFloat = 4
+    static let multipleCollectionSize: CGFloat = 2.5
 }
 
 enum TypeSearch {
@@ -33,8 +33,10 @@ final class SearchViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        sizeSeachCellCollection.height = view.frame.height / ConstantSearchView.multipleCollectionSize
-        sizeSeachCellCollection.width = view.frame.width / ConstantSearchView.multipleCollectionSize
+        sizeSeachCellCollection.height =
+            view.frame.height / ConstantSearchView.multipleCollectionSize
+        sizeSeachCellCollection.width =
+            view.frame.width / ConstantSearchView.multipleCollectionSize
     }
     
     private func configSearchView() {
@@ -115,8 +117,7 @@ extension SearchViewController: UICollectionViewDelegate,
     
     func collectionView(_ collectionView: UICollectionView,
                         didSelectItemAt indexPath: IndexPath) {
-        let detailStoryBoard = UIStoryboard(name: StoryBoardReference.detailStoryBoard, bundle:nil)
-        guard let detailVC = detailStoryBoard.instantiateViewController(withIdentifier: IdStoryBoardViews.detailRecipeVC)
+        guard let detailVC = StoryBoardReference.detail.storyBoard.instantiateViewController(withIdentifier: IdStoryBoardViews.detailRecipeVC)
                 as? DetailRecipeController else { return }
         detailVC.recipe = typeSearch == .searchName
             ? listResultSearchByName[indexPath.row]
