@@ -34,18 +34,12 @@ final class DietController: UIViewController {
         configDietView()
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        if listDiet.isEmpty() {
-            navigationAddDietView()
-        }
-    }
-    
     private func configDietView() {
         btnDropDownDiet.layer.cornerRadius = CGFloat(ConstantDietView.cornerRadius)
+        navigationController?.setNavigationBarHidden(true, animated: true)
         listDiet = sqlite3.readTableDiet()
         heightTableViewConstraint.constant = CGFloat(listDiet.count * ConstantDietView.heightDropDownTableView)
-        if listDiet.isEmpty() {
+        if listDiet.isEmpty {
             navigationAddDietView()
         }
         dropDietButton.setTitle(listDiet[0].name, for: .normal)
@@ -57,7 +51,7 @@ final class DietController: UIViewController {
           iconAfterNoonImageView,
           iconEveningImageView].forEach {
             let gesture = UITapGestureRecognizer(target: self,
-                                                 action: #selector(clickIconSession(_:)))
+                                                 action: #selector(onTransferRecipeSession(_:)))
             $0?.isUserInteractionEnabled = true
             $0?.addGestureRecognizer(gesture)
          }
@@ -76,7 +70,9 @@ final class DietController: UIViewController {
     private func getDietSessionByDate(datePicker: Date) -> [RecipeDiet]? {
         var result = [RecipeDiet]()
         let formatter = DateFormatter()
+        formatter.timeZone = TimeZone(identifier: "UTC")
         formatter.dateFormat = "dd/MM/yyyy"
+        formatter.locale = Locale.current
         selectDiet?.recipeSessions.forEach({
             if formatter.string(from: $0.date) == formatter.string(from: datePicker) {
                 result = $0.recipes
@@ -88,7 +84,7 @@ final class DietController: UIViewController {
     @objc private func handleDatePicker() {
         selectDatePicker = dietDatePicker.date
         selectRecipeSession = getDietSessionByDate(datePicker: selectDatePicker) ?? [RecipeDiet]()
-        if selectRecipeSession.isEmpty {
+        if !selectRecipeSession.isEmpty {
             setUpRecipeSession(recipe: selectRecipeSession[selectSession])
         } else {
             let alert = UIAlertController.createDefaultAlert(title: "Alert", message: "Quantity saved within 7 days", style: .alert)
@@ -125,8 +121,10 @@ final class DietController: UIViewController {
     }
     
     private func navigationAddDietView() {
-        guard let addDietVC = self.storyboard?.instantiateViewController(
-                withIdentifier: IdStoryBoardViews.addDiet) as? AddDietViewController
+        let dietStoryBoard = UIStoryboard(name: StoryBoardReference.dietStoryBoard,
+                                          bundle:nil)
+        guard let addDietVC = dietStoryBoard.instantiateViewController(
+                withIdentifier: IdStoryBoardViews.addDietVC) as? AddDietViewController
         else { return }
         self.navigationController?.pushViewController(addDietVC, animated: true)
     }
@@ -196,7 +194,7 @@ extension DietController: UITableViewDelegate,
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             let dietToDelete = listDiet[indexPath.row]
-            confirmDelete(diet: dietToDelete, index: indexPath.row)
+            confirmDeleteDiet(diet: dietToDelete, index: indexPath.row)
         }
     }
 }

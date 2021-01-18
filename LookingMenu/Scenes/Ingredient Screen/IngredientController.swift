@@ -8,7 +8,6 @@ private enum ConstantIngredientView {
     static let radiusButton: CGFloat = 15
     static let radiusTableView: CGFloat = 20
     static let heightTableIngredient: CGFloat = 60
-    static let typeSearch = "ingredient"
     static let idSearchIngredientTableView = "searchIngredientTableView"
     
     enum DataProteinPickerView: String, CaseIterable {
@@ -54,6 +53,7 @@ final class IngredientController: UIViewController {
     }
     
     private func configIngredientView() {
+        navigationController?.setNavigationBarHidden(true, animated: true)
         [addProteinButton, addVitaminButton].forEach {
             $0?.layer.cornerRadius = ConstantIngredientView.radiusButton
         }
@@ -76,11 +76,12 @@ final class IngredientController: UIViewController {
     }
     
     @IBAction private func goToViewSearch(_ sender: Any) {
-        guard let searchVC = self.storyboard?.instantiateViewController(
-                withIdentifier: IdStoryBoardViews.search) as? SearchViewController
+        let homeStoryBoard = UIStoryboard(name: StoryBoardReference.homeStoryBoard, bundle:nil)
+        guard let searchVC = homeStoryBoard.instantiateViewController(
+                withIdentifier: IdStoryBoardViews.searchVC) as? SearchViewController
         else { return }
         searchVC.keyWord = ingredients.joined(separator: ",")
-        searchVC.typeSearch = ConstantIngredientView.typeSearch
+        searchVC.typeSearch = .searchIngredient
         self.navigationController?.pushViewController(searchVC, animated: true)
     }
 }
@@ -114,7 +115,7 @@ extension IngredientController: UIPickerViewDelegate,
 }
 
 extension IngredientController: UITableViewDelegate,
-                                 UITableViewDataSource {
+                                UITableViewDataSource {
     func tableView(_ tableView: UITableView,
                    numberOfRowsInSection section: Int) -> Int {
         return ingredients.count
