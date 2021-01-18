@@ -13,5 +13,12 @@ final class UrlAPIRecipe {
         "https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/%d/ingredientWidget.json"
     static let urlDataEquipment =
         "https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/%d/equipmentWidget.json"
+    static let urlImageRecipe =
+        "https://spoonacular.com/recipeImages/%@"
+    static let urlImageRecipeDetail =
+        "https://spoonacular.com/cdn/%@_100x100/%@"
+    static let urlRecipeNutrient = "https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/findByNutrients?number=50&maxCalories=%f"
+    static let urlEmbebYoutube = "https://www.youtube.com/embed/%@"
+    static let urlSearchByIngredients = "https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/findByIngredients?ingredients=%@&number=5"
 }
 

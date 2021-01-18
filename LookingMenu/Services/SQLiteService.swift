@@ -4,14 +4,14 @@ import SQLite3
 private enum ConstantSqlite {
     static let path = "LookingMenu.sqlite"
     static let queryCreateTableDiet = "CREATE TABLE IF NOT EXISTS Diet(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT,  calor REAL, recipeSessions TEXT);"
-    static let queryCreateTableDietFavourite = "CREATE TABLE IF NOT EXISTS FavouriteDiet(id INTEGER PRIMARY KEY, image TEXT, title TEXT, readyInMinutes Integer);"
+    static let queryCreateTableDietFavourite = "CREATE TABLE IF NOT EXISTS FavouriteRecipe(id INTEGER PRIMARY KEY, title TEXT, readyInMinutes Integer, image TEXT);"
     static let queryInsertDataDiet = "INSERT INTO Diet (name, calor, recipeSessions) VALUES (?, ?, ?);"
     static let queryReadDataDiet = "SELECT * FROM Diet"
     static let queryDeleteDataDiet =  "DELETE FROM Diet WHERE id=?;"
-    static let queryReadDataDietFavourite = "SELECT * FROM FavouriteDiet"
-    static let queryCheckDataDietFavourite = "SELECT * FROM FavouriteDiet WHERE id=?;"
-    static let queryInsertDataDietFavourite = "INSERT INTO FavouriteDiet (id, title, readyInMinutes, image) VALUES (?, ?, ?, ?);"
-    static let queryDeleteDataDietFavourite = "DELETE FROM FavouriteDiet WHERE id=?;"
+    static let queryReadDataDietFavourite = "SELECT * FROM FavouriteRecipe"
+    static let queryCheckDataDietFavourite = "SELECT * FROM FavouriteRecipe WHERE id=?;"
+    static let queryInsertDataDietFavourite = "INSERT INTO FavouriteRecipe (id, title, readyInMinutes, image) VALUES (?, ?, ?, ?);"
+    static let queryDeleteDataDietFavourite = "DELETE FROM FavouriteRecipe WHERE id=?;"
 }
 
 class SQLiteService {
@@ -63,8 +63,7 @@ class SQLiteService {
         var statement: OpaquePointer? = nil
         
         if sqlite3_prepare_v2(db, query, -1, &statement, nil) == SQLITE_OK {
-            let nameUtf8 = String(describing: name.cString(using: String.Encoding.utf8))
-            sqlite3_bind_text(statement, 1, nameUtf8, -1, nil)
+            sqlite3_bind_text(statement, 1,  (name as NSString).utf8String, -1, nil)
             sqlite3_bind_double(statement, 2, Double(calorie))
             guard let data = try? JSONEncoder().encode(recipeSessions)
             else { return }
@@ -128,12 +127,10 @@ class SQLiteService {
         let query = ConstantSqlite.queryInsertDataDietFavourite
         var statement: OpaquePointer? = nil
         if sqlite3_prepare_v2(db, query, -1, &statement, nil) == SQLITE_OK {
-            let titleUtf8 = String(describing: title.cString(using: String.Encoding.utf8))
-            let imageUtf8 = String(describing: image.cString(using: String.Encoding.utf8))
             sqlite3_bind_int(statement, 1, Int32(id))
-            sqlite3_bind_text(statement, 2, titleUtf8, -1, nil)
+            sqlite3_bind_text(statement, 2, (title as NSString).utf8String, -1, nil)
             sqlite3_bind_int(statement, 3, Int32(readyInMinutes))
-            sqlite3_bind_text(statement, 4, imageUtf8, -1, nil)
+            sqlite3_bind_text(statement, 4, (image as NSString).utf8String, -1, nil)
             sqlite3_step(statement)
         }
     }
