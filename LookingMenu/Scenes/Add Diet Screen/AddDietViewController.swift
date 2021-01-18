@@ -1,7 +1,7 @@
 import UIKit
 
 private enum Activities: String {
-    static let allCases : [Activities] = [
+    static let allCases: [Activities] = [
         sedentary,
         light,
         moderate,
@@ -22,7 +22,7 @@ private enum Activities: String {
         case .light: return 1.411
         case .moderate: return 1.504
         case .activez: return 1.591
-        case .very : return 1.771
+        case .very: return 1.771
         case .extra: return 1.950
         }
     }
@@ -67,15 +67,14 @@ final class AddDietViewController: UIViewController {
     private func configAddDietView() {
         [ heightOfUserTextField,
           weightOfUserTextField,
-          ageOfUserTextField
-        ].forEach {
+          ageOfUserTextField].forEach {
             $0?.paddingLeftTextField()
             $0?.layer.masksToBounds = true
             $0?.cornerCircle()
         }
-        heightOfUserTextField.colorPlaceHoder(text: ConstantAddDietView.textFieldHeightPlaceholder)
-        weightOfUserTextField.colorPlaceHoder(text: ConstantAddDietView.textFieldWeightPlaceholder)
-        ageOfUserTextField.colorPlaceHoder(text: ConstantAddDietView.textFieldAgePlaceholder)
+        heightOfUserTextField.customPlaceHoder(text: ConstantAddDietView.textFieldHeightPlaceholder)
+        weightOfUserTextField.customPlaceHoder(text: ConstantAddDietView.textFieldWeightPlaceholder)
+        ageOfUserTextField.customPlaceHoder(text: ConstantAddDietView.textFieldAgePlaceholder)
         dropDownActivityButton.cornerCircle()
         dropDownActivityTableView.register(DropDownTableCell.self,
                                            forCellReuseIdentifier: ConstantAddDietView.idDropDownActivityCell)
@@ -150,8 +149,8 @@ final class AddDietViewController: UIViewController {
         var result = [RecipeSession]()
         var listRecipe = list
         let now = Calendar.current.dateComponents(in: .current, from: Date())
-        for element in 0..<7 {
-            let nextDay = DateComponents(year: now.year, month: now.month, day: now.day ?? 1 + element )
+        for element in 1..<8 {
+            let nextDay = DateComponents(year: now.year, month: now.month, day: (now.day ?? 1) + element )
             guard let date = Calendar.current.date(from: nextDay) else { return result }
             let recipes = getDietSessionMenu(list: &listRecipe)
             let recipeSession = RecipeSession(date: date, recipes: recipes)
@@ -178,7 +177,7 @@ final class AddDietViewController: UIViewController {
     
     private func createDataDiet(name: String) {
         let calor = calculatorCalor()
-        APIRecipe.apiRecipe.getRecipesByNutrient(calor: calor) { list in
+        APIRecipe.apiRecipe.getRecipesByNutrient(calor: calor) { [unowned self] list in
             DispatchQueue.main.async {
                 sqlite3.insertQueryDiet(name: name,
                                         calorie: calor,

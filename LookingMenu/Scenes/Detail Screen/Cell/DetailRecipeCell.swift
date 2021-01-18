@@ -8,21 +8,21 @@ private enum ConstantRecipeCell {
 }
 
 final class DetailRecipeCell: UITableViewCell {
-    lazy private var detailRecipeBackground : UIView  = {
+    lazy private var detailRecipeBackground: UIView = {
         let view = UIView()
         view.backgroundColor = .white
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
     
-    lazy private var detailRecipeImage : UIImageView  = {
+    lazy private var detailRecipeImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.layer.masksToBounds = true
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
     }()
     
-    lazy private var detailRecipeTitle : UILabel = {
+    lazy private var detailRecipeTitleLabel: UILabel = {
         let label = UILabel()
         label.numberOfLines = 2
         label.textColor = .blackDesign
@@ -34,43 +34,43 @@ final class DetailRecipeCell: UITableViewCell {
         addDetailBackground()
     }
     
-    func configDetailRecipeCell(item : Detail, typeDetailCell : Bool) {
-        detailRecipeImage.getImageFromURL(
+    func configDetailRecipeCell(item: Detail, typeDetailCell: Bool) {
+        detailRecipeImageView.getImageFromURL(
             imgURL: String(format: UrlAPIRecipe.urlImageRecipeDetail,
                            typeDetailCell ? "ingredients" : "equipment",
                            item.image
             ))
-        detailRecipeTitle.text = item.name
+        detailRecipeTitleLabel.text = item.name
     }
     
     private func addDetailTitle() {
-        detailRecipeBackground.addSubview(detailRecipeTitle)
+        detailRecipeBackground.addSubview(detailRecipeTitleLabel)
         NSLayoutConstraint.activate([
-            detailRecipeTitle.trailingAnchor.constraint(
+            detailRecipeTitleLabel.trailingAnchor.constraint(
                 equalTo: trailingAnchor,
                 constant: -ConstantRecipeCell.constantAnchor),
-            detailRecipeTitle.leadingAnchor.constraint(
-                equalTo: detailRecipeImage.trailingAnchor,
+            detailRecipeTitleLabel.leadingAnchor.constraint(
+                equalTo: detailRecipeImageView.trailingAnchor,
                 constant: ConstantRecipeCell.constantAnchor),
-            detailRecipeTitle.centerYAnchor.constraint(equalTo: detailRecipeImage.centerYAnchor)
+            detailRecipeTitleLabel.centerYAnchor.constraint(equalTo: detailRecipeImageView.centerYAnchor)
         ])
     }
     
     private func addDetailImage() {
-        detailRecipeBackground.addSubview(detailRecipeImage)
+        detailRecipeBackground.addSubview(detailRecipeImageView)
         NSLayoutConstraint.activate([
-            detailRecipeImage.leadingAnchor.constraint(
+            detailRecipeImageView.leadingAnchor.constraint(
                 equalTo:detailRecipeBackground.leadingAnchor,
                 constant: ConstantRecipeCell.constantAnchor),
-            detailRecipeImage.widthAnchor.constraint(equalToConstant: frame.width * 0.4),
-            detailRecipeImage.topAnchor.constraint(
+            detailRecipeImageView.widthAnchor.constraint(equalToConstant: frame.width * 0.4),
+            detailRecipeImageView.topAnchor.constraint(
                 equalTo: detailRecipeBackground.topAnchor,
                 constant: ConstantRecipeCell.constantDetailBG),
-            detailRecipeImage.bottomAnchor.constraint(
+            detailRecipeImageView.bottomAnchor.constraint(
                 equalTo: detailRecipeBackground.bottomAnchor,
                 constant: -ConstantRecipeCell.constantDetailBG)
         ])
-        detailRecipeImage.layer.cornerRadius = detailRecipeImage.frame.height / 2
+        detailRecipeImageView.layer.cornerRadius = detailRecipeImageView.frame.height / 2
     }
     
     private func addDetailBackground() {
