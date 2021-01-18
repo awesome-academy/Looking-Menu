@@ -1,10 +1,14 @@
-import Foundation
+import UIKit
 
-enum StoryBoardReference {
-    static let menu = "MenuBar"
-    static let home = "Home"
-    static let detail = "Detail"
-    static let ingredient = "Ingredient"
-    static let diet = "Diet"
-    static let favourite = "Favourite"
+enum StoryBoardReference: String {
+    case main = "Main"
+    case home = "Home"
+    case detail = "Detail"
+    case ingredient = "Ingredient"
+    case diet = "Diet"
+    case favourite = "Favourite"
+    
+    var storyBoard: UIStoryboard {
+        return UIStoryboard(name: self.rawValue, bundle: nil)
+    }
 }

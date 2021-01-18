@@ -52,8 +52,7 @@ extension HomeViewController : UICollectionViewDelegate,
     
     func collectionView(_ collectionView: UICollectionView,
                         didSelectItemAt indexPath: IndexPath) {
-        let detailStoryBoard = UIStoryboard(name: StoryBoardReference.detailStoryBoard, bundle:nil)
-        guard let detailVC = detailStoryBoard.instantiateViewController(
+        guard let detailVC = StoryBoardReference.detail.storyBoard.instantiateViewController(
                 withIdentifier: IdStoryBoardViews.detailRecipeVC)
                 as? DetailRecipeController
         else { return }
@@ -74,8 +73,7 @@ extension HomeViewController : UICollectionViewDelegate,
 
 extension HomeViewController: UISearchBarDelegate {
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        let homeStoryBoard = UIStoryboard(name: StoryBoardReference.homeStoryBoard, bundle:nil)
-        guard let searchVC = homeStoryBoard.instantiateViewController(
+        guard let searchVC = StoryBoardReference.home.storyBoard.instantiateViewController(
                 withIdentifier: IdStoryBoardViews.searchVC) as? SearchViewController,
               let textSearch = searchBar.text
         else { return }

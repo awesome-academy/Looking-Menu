@@ -121,9 +121,7 @@ final class DietController: UIViewController {
     }
     
     private func navigationAddDietView() {
-        let dietStoryBoard = UIStoryboard(name: StoryBoardReference.dietStoryBoard,
-                                          bundle:nil)
-        guard let addDietVC = dietStoryBoard.instantiateViewController(
+        guard let addDietVC = StoryBoardReference.diet.storyBoard.instantiateViewController(
                 withIdentifier: IdStoryBoardViews.addDietVC) as? AddDietViewController
         else { return }
         self.navigationController?.pushViewController(addDietVC, animated: true)

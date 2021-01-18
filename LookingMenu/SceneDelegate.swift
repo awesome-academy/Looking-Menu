@@ -7,13 +7,11 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                options connectionOptions: UIScene.ConnectionOptions) {
         let windowScene = UIWindowScene(session: session, connectionOptions: connectionOptions)
         self.window = UIWindow(windowScene: windowScene)
-        let storyboard = UIStoryboard(
-            name: StoryBoardReference.mainStoryBoard, bundle: nil)
         let status = UserDefaults.standard.bool(
             forKey: KeyUserDefaults.keyCheckNewUser)
-        guard let mainVC = storyboard.instantiateViewController(
+        guard let mainVC = StoryBoardReference.main.storyBoard.instantiateViewController(
                 identifier: IdStoryBoardViews.mainVC) as? ViewController,
-              let welcomeVC = storyboard.instantiateViewController(
+              let welcomeVC = StoryBoardReference.main.storyBoard.instantiateViewController(
                 identifier: IdStoryBoardViews.welcomeVC) as? WelcomeViewController
         else { return }
         let rootNC = UINavigationController(rootViewController: status ? mainVC : welcomeVC)

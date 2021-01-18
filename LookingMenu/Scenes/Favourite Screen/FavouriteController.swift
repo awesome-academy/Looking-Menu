@@ -49,7 +49,7 @@ extension FavouriteController: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        guard let detailVC = self.storyboard?.instantiateViewController(
+        guard let detailVC = StoryBoardReference.detail.storyBoard.instantiateViewController(
                 withIdentifier: IdStoryBoardViews.detailRecipeVC)
                 as? DetailRecipeController else { return }
         detailVC.recipe = listFavouriteRecipe[indexPath.row]
