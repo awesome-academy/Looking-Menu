@@ -16,6 +16,7 @@ final class FavouriteController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        LoadingView.instance.showLoading()
         configFavouriteView()
     }
     
@@ -24,6 +25,7 @@ final class FavouriteController: UIViewController {
         favouriteRecipeTableView.register(FavouriteRecipeTableCell.self,
                                           forCellReuseIdentifier: ConstantFavouriteRecipeCell.idFavouriteRecipeTableCell)
         favouriteRecipeTableView.reloadData()
+        LoadingView.instance.hideLoading()
     }
 }
 

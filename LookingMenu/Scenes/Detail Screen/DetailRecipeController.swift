@@ -46,6 +46,7 @@ final class DetailRecipeController: UIViewController {
     }
     
     private func configDetailRecipeView() {
+        LoadingView.instance.showLoading()
         guard let recipe = recipe else { return }
         checkRecipeFavourite = sqlite3.checkRecipeFavourite(
             idDiet: recipe.id)
@@ -63,9 +64,10 @@ final class DetailRecipeController: UIViewController {
             (ingredient, equipment) in
             self.ingredients = ingredient.ingredients
             self.equipments = equipment.equipment
-            
+    
             self.ingredientTableView.reloadData()
             self.equipmentTableView.reloadData()
+            LoadingView.instance.hideLoading()
         }
         
         [ingredientTableView, equipmentTableView].forEach {
