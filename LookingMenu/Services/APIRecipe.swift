@@ -38,7 +38,6 @@ final class APIRecipe {
                                 @escaping (_ result: ResultSearch) -> Void) {
         let urlString = String(format: UrlAPIRecipe.urlSearchRecipeByName, query, offset)
         getDataToAPIRecipe(from: urlString, completion: getListRecipe)
-        
     }
     
     func searchVideoByName(query:String, getVideoSearch:

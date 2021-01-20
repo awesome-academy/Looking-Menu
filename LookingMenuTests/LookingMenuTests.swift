@@ -1,10 +1,3 @@
-//
-//  LookingMenuTests.swift
-//  LookingMenuTests
-//
-//  Created by Huy Than Duc on 31/12/2020.
-//
-
 import XCTest
 @testable import LookingMenu
 

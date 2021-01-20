@@ -16,16 +16,25 @@ final class FavouriteController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        LoadingView.instance.showLoading()
         configFavouriteView()
+        NotificationCenter.default.addObserver(self, selector: #selector(userAddFavourite), name: Notification.Name("addFavourite"), object: nil)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        NotificationCenter.default.removeObserver(self, name: Notification.Name("addFavourite"), object: nil)
     }
     
     private func configFavouriteView() {
+        navigationController?.setNavigationBarHidden(true, animated: true)
         listFavouriteRecipe = sqlite3.readTableDietFavourite()
         favouriteRecipeTableView.register(FavouriteRecipeTableCell.self,
                                           forCellReuseIdentifier: ConstantFavouriteRecipeCell.idFavouriteRecipeTableCell)
         favouriteRecipeTableView.reloadData()
-        LoadingView.instance.hideLoading()
+    }
+    
+    @objc func userAddFavourite() {
+        configFavouriteView()
     }
 }
 
@@ -66,9 +75,9 @@ extension FavouriteController: UITableViewDataSource, UITableViewDelegate {
                    commit editingStyle: UITableViewCell.EditingStyle,
                    forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
+            sqlite3.deleteDietFavourite(idDiet: listFavouriteRecipe[indexPath.row].id)
             listFavouriteRecipe.remove(at: indexPath.row)
             favouriteRecipeTableView.reloadData()
-            sqlite3.deleteDietFavourite(idDiet: listFavouriteRecipe[indexPath.row].id)
         }
     }
 }

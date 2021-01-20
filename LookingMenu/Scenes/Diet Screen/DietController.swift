@@ -21,6 +21,8 @@ final class DietController: UIViewController {
     @IBOutlet private weak var dietDatePicker: UIDatePicker!
     @IBOutlet private weak var recipeSessionImageView: UIImageView!
     @IBOutlet private weak var recipeSesssionTitleLabel: UILabel!
+    @IBOutlet weak var showRecipeStackView: UIStackView!
+    
     private var listDiet = [Diet]()
     private var isDropDown = true
     private var selectDatePicker = Date()
@@ -31,6 +33,11 @@ final class DietController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        configDietView()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         configDietView()
     }
     
@@ -60,6 +67,20 @@ final class DietController: UIViewController {
         selectDiet = listDiet[0]
         selectRecipeSession = getDietSessionByDate(datePicker: Date()) ?? [RecipeDiet]()
         setUpRecipeSession(recipe: selectRecipeSession[selectSession])
+        let gestureStackView = UITapGestureRecognizer(target: self,
+                                             action: #selector(onClickRecipe(_:)))
+        showRecipeStackView.addGestureRecognizer(gestureStackView)
+    }
+    
+    @objc private func onClickRecipe(_ sender: UITapGestureRecognizer) {
+        guard let detailVC = StoryBoardReference.detail.storyBoard.instantiateViewController(withIdentifier: IdStoryBoardViews.detailRecipeVC)
+                as? DetailRecipeController else { return }
+        detailVC.recipe = Recipe (
+            id: selectRecipeSession[selectSession].id,
+            title: selectRecipeSession[selectSession].title,
+            readyInMinutes: 1,
+            image: selectRecipeSession[selectSession].image)
+        navigationController?.pushViewController(detailVC, animated: true)
     }
     
     private func setUpRecipeSession(recipe : RecipeDiet) {
@@ -73,8 +94,9 @@ final class DietController: UIViewController {
         formatter.timeZone = TimeZone(identifier: "UTC")
         formatter.dateFormat = "dd/MM/yyyy"
         formatter.locale = Locale.current
+        let dateSession = Calendar.current.date(byAdding: .day, value: 1, to: datePicker) ?? datePicker
         selectDiet?.recipeSessions.forEach({
-            if formatter.string(from: $0.date) == formatter.string(from: datePicker) {
+            if formatter.string(from: $0.date) == formatter.string(from: dateSession) {
                 result = $0.recipes
             }
         })
