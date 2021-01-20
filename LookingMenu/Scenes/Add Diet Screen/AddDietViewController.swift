@@ -71,7 +71,7 @@ final class AddDietViewController: UIViewController {
             $0?.paddingLeftTextField()
             $0?.layer.masksToBounds = true
             $0?.cornerCircle()
-        }
+          }
         heightOfUserTextField.customPlaceHoder(text: ConstantAddDietView.textFieldHeightPlaceholder)
         weightOfUserTextField.customPlaceHoder(text: ConstantAddDietView.textFieldWeightPlaceholder)
         ageOfUserTextField.customPlaceHoder(text: ConstantAddDietView.textFieldAgePlaceholder)
@@ -127,7 +127,7 @@ final class AddDietViewController: UIViewController {
               let height = heightOfUserTextField.text,
               let age = ageOfUserTextField.text
         else { return 0.0 }
-        let calorByHeight = ConstantAddDietView.calorieHeight * Double( (height as NSString).integerValue)
+        let calorByHeight = ConstantAddDietView.calorieHeight * Double((height as NSString).integerValue)
         let calorByWeight = ConstantAddDietView.calorieWeight * Double((weight as NSString).integerValue)
         let calorByAge = ConstantAddDietView.calorieAge * Int((age as NSString).integerValue)
         let calorByGenre = selectedGender ? ConstantAddDietView.calorieMale : ConstantAddDietView.calorieMale
@@ -176,12 +176,14 @@ final class AddDietViewController: UIViewController {
     }
     
     private func createDataDiet(name: String) {
+        LoadingView.instance.showLoading()
         let calor = calculatorCalor()
         APIRecipe.apiRecipe.getRecipesByNutrient(calor: calor) { [unowned self] list in
             DispatchQueue.main.async {
                 sqlite3.insertQueryDiet(name: name,
                                         calorie: calor,
                                         recipeSessions: createRecipeDietForSession(list: list))
+                LoadingView.instance.hideLoading()
                 navigationController?.popViewController(animated: true)
             }
         }
@@ -193,7 +195,7 @@ final class AddDietViewController: UIViewController {
 }
 
 extension AddDietViewController: UITableViewDelegate,
-                                  UITableViewDataSource {
+                                 UITableViewDataSource {
     func tableView(_ tableView: UITableView,
                    numberOfRowsInSection section: Int) -> Int {
         return activities.count

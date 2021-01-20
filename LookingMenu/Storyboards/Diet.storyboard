@@ -167,6 +167,7 @@
                         <outlet property="listDietTableView" destination="6tG-S1-Dhp" id="TMW-8F-Pev"/>
                         <outlet property="recipeSessionImageView" destination="9SI-Wk-cJ6" id="k31-i2-n9O"/>
                         <outlet property="recipeSesssionTitleLabel" destination="3cl-l1-age" id="7wJ-XW-c1b"/>
+                        <outlet property="showRecipeStackView" destination="hLH-0U-FqX" id="ovo-Pe-tp0"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="brS-DH-LXz" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>

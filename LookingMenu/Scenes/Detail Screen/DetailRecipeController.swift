@@ -150,6 +150,7 @@ final class DetailRecipeController: UIViewController {
                                                             ? "heart.fill"
                                                             : "heart"
         ), for: .normal)
+        NotificationCenter.default.post(name: Notification.Name("addFavourite"), object: nil)
     }
     
     @IBAction func goBackView(_ sender: Any) {
