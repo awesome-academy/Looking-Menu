@@ -34,7 +34,7 @@ final class VideoRecipeController: UIViewController {
         let query = recipe.title.components(separatedBy: " ")
         nameRecipeLabel.text = recipe.title
         APIRecipe.apiRecipe.searchVideoByName(query: query[0]) { [unowned self] result in
-            guard let video = result.videos.first else { return }
+            guard let video = result?.videos.first else { return }
             DispatchQueue.main.async {
                 self.loadVideoEmbedYoutube(id: video.youTubeId)
                 self.setDataDescriptionVideo(video: video)

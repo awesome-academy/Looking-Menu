@@ -13,7 +13,7 @@ final class APIRecipe {
     }
     
     func getDataToAPIRecipe<T: Decodable>(from path: String,
-                                          completion: @escaping (T) -> ()) {
+                                          completion: @escaping (T?) -> ()) {
         guard let header = self.headerAPI(urlString: path)
         else { return }
         URLSession.shared.dataTask(with: header) { (data, response, error) in
@@ -23,32 +23,32 @@ final class APIRecipe {
                 let response = try decoder.decode(T.self, from: data)
                 completion(response)
             } catch {
-                print(error)
+                completion(nil)
             }
         }.resume()
     }
     
     func getRandomRecipe(offset: Int = 5, getListRecipe:
-                            @escaping (_ result: Recipes) -> Void) {
+                            @escaping (_ result: Recipes?) -> Void) {
         let urlString = String(format: UrlAPIRecipe.urlGetRecipeRandom, offset)
         getDataToAPIRecipe(from: urlString, completion: getListRecipe)
     }
     
     func searchRecipeByName(query:String, offset: Int = 10, getListRecipe:
-                                @escaping (_ result: ResultSearch) -> Void) {
+                                @escaping (_ result: ResultSearch?) -> Void) {
         let urlString = String(format: UrlAPIRecipe.urlSearchRecipeByName, query, offset)
         getDataToAPIRecipe(from: urlString, completion: getListRecipe)
         
     }
     
     func searchVideoByName(query:String, getVideoSearch:
-                            @escaping (_ result: Videos) -> Void) {
+                            @escaping (_ result: Videos?) -> Void) {
         let urlString = String(format: UrlAPIRecipe.urlDataVideoRecipe, query)
         getDataToAPIRecipe(from: urlString, completion: getVideoSearch)
     }
     
     func getInformationRecipe(idRecipe: Int, informationRecipe:
-                                @escaping (_ result: Information) -> Void) {
+                                @escaping (_ result: Information?) -> Void) {
         let urlString = String(format: UrlAPIRecipe.urlGetDetailRecipe, idRecipe)
         getDataToAPIRecipe(from: urlString, completion: informationRecipe)
     }
@@ -62,12 +62,12 @@ final class APIRecipe {
         var ingredient : Ingredients?
         var equipment : Equipments?
         
-        func doIngredient(process: Ingredients) -> Void {
+        func doIngredient(process: Ingredients?) -> Void {
             ingredient = process
             dispatchGroup.leave()
         }
         
-        func doEquipment(process: Equipments) -> Void {
+        func doEquipment(process: Equipments?) -> Void {
             equipment = process
             dispatchGroup.leave()
         }
@@ -95,13 +95,13 @@ final class APIRecipe {
     }
     
     func getRecipesByNutrient(calor: Double, informationRecipe:
-                                @escaping (_ result : [RecipeDiet]) -> Void) {
+                                @escaping (_ result : [RecipeDiet]?) -> Void) {
         let urlString = String(format: UrlAPIRecipe.urlRecipeNutrient, calor)
         getDataToAPIRecipe(from: urlString, completion: informationRecipe)
     }
     
     func searchRecipesByIngredient(ingredients: String, resultSeach:
-                                    @escaping (_ result: [ResultSearchByIngredients]) -> Void) {
+                                    @escaping (_ result: [ResultSearchByIngredients]?) -> Void) {
         let urlString = String(format: UrlAPIRecipe.urlSearchByIngredients, ingredients)
         getDataToAPIRecipe(from: urlString, completion: resultSeach)
     }

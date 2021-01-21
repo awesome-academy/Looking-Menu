@@ -44,6 +44,7 @@ final class SearchViewController: UIViewController {
         if typeSearch == .searchName {
             APIRecipe.apiRecipe.searchRecipeByName(query: keyWord) { [unowned self] result in
                 DispatchQueue.main.async {
+                    guard let result = result else { return }
                     self.listResultSearchByName = result.results
                     self.labelTotalResult.text = "Found \(result.totalResults) results"
                     self.viewRecipeNotFound.isHidden = result.totalResults != 0
@@ -56,6 +57,7 @@ final class SearchViewController: UIViewController {
         } else {
             APIRecipe.apiRecipe.searchRecipesByIngredient(ingredients: keyWord) { [unowned self] result in
                 DispatchQueue.main.async {
+                    guard let result = result else { return }
                     listResultSearchByIngredients = result
                     labelTotalResult.isHidden = true
                     self.viewRecipeNotFound.isHidden = result.count != 0

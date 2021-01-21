@@ -23,6 +23,7 @@ final class TextRecipeController: UIViewController{
         titleRecipeLabel.text = recipe.title
         APIRecipe.apiRecipe.getInformationRecipe(idRecipe: recipe.id) { [unowned self] info in
             DispatchQueue.main.async {
+                guard let info = info else { return }
                 self.minuteReadyLabel.text = "\(info.readyInMinutes) minute"
                 self.priceRecipeLabel.text = "\(info.pricePerServing) $"
                 self.numberServingLabel.text = "\(info.servings)"

@@ -23,6 +23,7 @@ final class HomeViewController: UIViewController {
         randomRecipesCollection.collectionViewLayout.invalidateLayout()
         APIRecipe.apiRecipe.getRandomRecipe(offset: 5) { [unowned self] recipes in
             DispatchQueue.main.async {
+                guard let recipes = recipes else { return }
                 self.listRandomRecipes = recipes.recipes
                 self.randomRecipesCollection.reloadData()
                 LoadingView.instance.hideLoading()
