@@ -180,6 +180,7 @@ final class AddDietViewController: UIViewController {
         let calor = calculatorCalor()
         APIRecipe.apiRecipe.getRecipesByNutrient(calor: calor) { [unowned self] list in
             DispatchQueue.main.async {
+                guard let list = list else { return }
                 sqlite3.insertQueryDiet(name: name,
                                         calorie: calor,
                                         recipeSessions: createRecipeDietForSession(list: list))
