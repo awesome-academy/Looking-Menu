@@ -13,4 +13,12 @@ final class SearchViewMirror: MirrorObject {
     var resultSearchCollection: UICollectionView? {
         return extract()
     }
+    
+    var viewRecipeNotFound: UIStackView? {
+        return extract()
+    }
+    
+    var labelKeyWordSearch: UILabel? {
+        return extract()
+    }
 }
